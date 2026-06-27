@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Quête Vauban - Énigme Saint-Martin-de-Ré</title>
+    <style>
+        body {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            background-color: #ffffff;
+            color: #333333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .logo {
+            max-width: 250px;
+            margin-bottom: 30px;
+        }
+
+        .enigme-texte {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .visuel-enigme {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* --- Contrôles Audio --- */
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .audio-btn {
+            cursor: pointer;
+            width: 60px;
+            height: auto;
+            transition: transform 0.2s ease;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .indice-audio {
+            font-size: 1rem;
+            font-style: italic;
+            color: #555555;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .fw-light { font-weight: 300; }
+        .fw-regular { font-weight: 400; }
+        .fw-bold { font-weight: bold; }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            font-size: 1rem;
+            padding: 10px 15px;
+            border: 2px solid #333;
+            border-radius: 4px;
+            width: 250px;
+            margin-bottom: 10px;
+            outline: none;
+        }
+
+        input[type="text"]::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        button {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: 2px solid #333;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: white;
+            color: #333;
+        }
+
+        button:disabled, input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .compteur {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        #message-resultat {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #333;
+            background-color: #f9f9f9;
+            text-align: left;
+        }
+
+        #message-resultat h3 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .erreur {
+            color: #d9534f;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .encart-indice {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #333;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        #texte-indice {
+            display: none;
+            font-size: 1.1rem;
+            color: #333;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="Logo-vauban-black0.png" alt="Logo Vauban" class="logo">
+
+        <div id="zone-observation">
+            <p class="enigme-texte fw-regular">quel nombre est manquant ?</p>
+            <img src="Enigme-1-quai-clemenceau.png" alt="Quai Clemenceau" class="visuel-enigme">
+            
+            <div class="input-group">
+                <input type="text" id="observation-input" placeholder="Votre réponse d'observation">
+                <br>
+                <button id="btn-valider-observation" onclick="verifierObservation()">Valider l'observation</button>
+            </div>
+        </div>
+
+        <div id="zone-enigme-audio" style="display: none;">
+            <audio id="enigme-audio" src="Kalimba-lecture-notes-Japonais.mp3"></audio>
+            
+            <div class="audio-controls" id="zone-audio">
+                <img src="Play0.png" alt="Jouer l'extrait" class="audio-btn" onclick="jouerAudio()">
+                <img src="Stop0.png" alt="Arrêter l'extrait" class="audio-btn" onclick="stopperAudio()">
+            </div>
+            
+            <p class="indice-audio" id="texte-indice-audio">Vos yeux ne suffiront pas ici. Mettez le son</p>
+
+            <div class="input-group">
+                <input type="text" id="reponse-input" placeholder="Saisissez votre réponse">
+                <br>
+                <button id="btn-valider-enigme" onclick="verifierReponse()">Valider l'énigme</button>
+            </div>
+        </div>
+
+        <p class="compteur" id="texte-compteur">Tentatives restantes : <span id="nb-essais">4</span></p>
+        <div id="message-erreur" class="erreur">Mauvaise réponse. Essayez encore !</div>
+
+        <div id="message-resultat">
+            <h3>Bravo !</h3>
+            <p>La croissance tout bonnement exponentielle de notre belle station balnéaire a nécessité quelques ajustements spirituels d'envergure. Il a fallu rapidement ordonner la construction de cette très imposante église Sainte-Madeleine pour accueillir dignement la ferveur de nos riches estivants. Car la villégiature et les bains de mer n'excluent en rien la foi fervente, ni la plus stricte rigueur morale ! N'oubliez jamais que la mer est une création divine dotée de puissantes vertus curatives, et non un vulgaire terrain de jeu pour enfants dissipés.</p>
+            <p>Prenez donc bonne note de cette nouvelle règle fondamentale.</p>
+            <p><strong>De l'Ordonnance Médicale et de la Flânerie Aquatique !</strong></p>
+            <p>Sachez que l'immersion purement récréative est considérée comme une véritable hérésie psychiatrique. Quiconque s'aventurera dans l'eau salée par simple plaisir du jeu sera immédiatement arrêté et renvoyé chez lui par le tout premier train ! L'océan est une austère officine médicale, pas un charmant salon de thé mondain. Pour tremper un orteil, vous devez impérativement détenir l'ordonnance dument tamponnée par le Médecin Inspecteur des Bains. Les gloussements, les éclaboussures ludiques et autres conversations frivoles entre deux vagues glaçantes sont formellement proscrits.</p>
+            
+            <div class="encart-indice">
+                <button id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
+                <div id="texte-indice">
+                    <p>Voici votre indice : <strong>La deuxième molette est un nombre impair.</strong></p>
+                    <p><em>Conservez-le précieusement pour espérer ouvrir le cadenas du coffre.</em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let etapeActuelle = 1; // 1 = Observation, 2 = Énigme Audio
+        let tentativesRestantes = 4;
+        
+        const reponseObservation Attendue = "5027";
+        const reponsesEnigmeAcceptees = ["auclair de la lune", "au clair de la lune"]; 
+
+        const audio = document.getElementById("enigme-audio");
+
+        function jouerAudio() {
+            audio.play();
+        }
+
+        function stopperAudio() {
+            audio.pause();
+        }
+
+        // Nouvelle fonction pour valider la première étape d'observation
+        function verifierObservation() {
+            const inputElement = document.getElementById("observation-input");
+            const btnElement = document.getElementById("btn-valider-observation");
+            const msgErreur = document.getElementById("message-erreur");
+            const nbEssaisElement = document.getElementById("nb-essais");
+
+            const reponseJoueur = inputElement.value.trim();
+
+            if (reponseJoueur === "") return;
+
+            if (reponseJoueur === reponseObservationAttendue) {
+                // Succès étape 1 -> Passage à l'étape 2
+                document.getElementById("zone-observation").style.display = "none";
+                document.getElementById("zone-enigme-audio").style.display = "block";
+                msgErreur.style.display = "none";
+                
+                // Réinitialisation des tentatives pour l'énigme suivante
+                etapeActuelle = 2;
+                tentativesRestantes = 4;
+                nbEssaisElement.textContent = tentativesRestantes;
+            } else {
+                gestionErreur(inputElement, btnElement, msgErreur, nbEssaisElement);
+            }
+        }
+
+        // Fonction modifiée pour valider la seconde étape (énigme audio)
+        function verifierReponse() {
+            const inputElement = document.getElementById("reponse-input");
+            const btnElement = document.getElementById("btn-valider-enigme");
+            const msgErreur = document.getElementById("message-erreur");
+            const msgResultat = document.getElementById("message-resultat");
+            const nbEssaisElement = document.getElementById("nb-essais");
+
+            const reponseJoueur = inputElement.value.trim().toLowerCase();
+
+            if (reponseJoueur === "") return; 
+
+            if (reponsesEnigmeAcceptees.includes(reponseJoueur)) {
+                stopperAudio(); 
+                
+                document.getElementById("zone-enigme-audio").style.display = "none";
+                document.getElementById("texte-compteur").style.display = "none";
+                msgErreur.style.display = "none";
+                msgResultat.style.display = "block";
+            } else {
+                gestionErreur(inputElement, btnElement, msgErreur, nbEssaisElement);
+            }
+        }
+
+        // Système de décompte partagé et générique
+        function gestionErreur(inputEl, btnEl, msgErr, txtCompteur) {
+            tentativesRestantes--;
+            txtCompteur.textContent = tentativesRestantes;
+            msgErr.style.display = "block";
+            inputEl.value = "";
+
+            if (tentativesRestantes <= 0) {
+                inputEl.disabled = true;
+                btnEl.disabled = true;
+                msgErr.textContent = "Vous n'avez plus de tentatives ! L'énigme est bloquée.";
+            }
+        }
+
+        function afficherIndice() {
+            document.getElementById("btn-indice").style.display = "none";
+            document.getElementById("texte-indice").style.display = "block";
+        }
+
+        // Prise en compte de la touche Entrée pour l'étape 1
+        document.getElementById("observation-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                verifierObservation();
+            }
+        });
+
+        // Prise en compte de la touche Entrée pour l'étape 2
+        document.getElementById("reponse-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                verifierReponse();
+            }
+        });
+    </script>
+
+</body>
+</html>
