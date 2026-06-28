@@ -7,8 +7,10 @@
     <style>
         body {
             font-family: "American Typewriter", "Courier New", Courier, serif;
-            background-color: #ffffff;
-            color: #333333;
+            /* Création d'un effet papier ancien en CSS */
+            background-color: #f4ebd8;
+            background-image: radial-gradient(circle at center, #fdf6e3 0%, #e6d5b8 100%);
+            color: #3a2e24; /* Texte légèrement marron foncé pour s'accorder au fond */
             margin: 0;
             padding: 20px;
             display: flex;
@@ -25,8 +27,16 @@
         }
 
         .logo {
-            max-width: 250px;
-            margin-bottom: 30px;
+            max-width: 150px; /* Taille du logo réduite */
+            margin-bottom: 20px;
+        }
+
+        /* --- Nouveau titre dynamique --- */
+        .titre-principal {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #2c221a;
         }
 
         .enigme-texte {
@@ -40,7 +50,7 @@
             height: auto;
             border-radius: 4px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* Ombre légèrement renforcée */
         }
 
         /* --- Contrôles Audio --- */
@@ -83,15 +93,16 @@
             font-family: "American Typewriter", "Courier New", Courier, serif;
             font-size: 1rem;
             padding: 10px 15px;
-            border: 2px solid #333;
+            border: 2px solid #4a3b2c; /* Bordure assortie au thème */
             border-radius: 4px;
             width: 250px;
             margin-bottom: 10px;
             outline: none;
+            background-color: rgba(255, 255, 255, 0.7); /* Rend le champ légèrement transparent */
         }
 
         input[type="text"]::placeholder {
-            color: #999;
+            color: #888;
             font-style: italic;
         }
 
@@ -100,17 +111,17 @@
             font-size: 1rem;
             font-weight: bold;
             padding: 10px 20px;
-            background-color: #333;
+            background-color: #3a2e24; /* Bouton assorti au thème */
             color: white;
-            border: 2px solid #333;
+            border: 2px solid #3a2e24;
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         button:hover {
-            background-color: white;
-            color: #333;
+            background-color: transparent;
+            color: #3a2e24;
         }
 
         button:disabled, input:disabled {
@@ -128,8 +139,8 @@
             display: none;
             margin-top: 20px;
             padding: 20px;
-            border: 1px solid #333;
-            background-color: #f9f9f9;
+            border: 1px solid #4a3b2c;
+            background-color: rgba(255, 255, 255, 0.6); /* Fond semi-transparent pour lire sur le papier */
             text-align: left;
         }
 
@@ -139,7 +150,7 @@
         }
 
         .erreur {
-            color: #d9534f;
+            color: #b71c1c;
             font-weight: bold;
             margin-top: 10px;
             display: none;
@@ -148,8 +159,8 @@
         .encart-indice {
             margin-top: 30px;
             padding: 20px;
-            border: 2px dashed #333;
-            background-color: #ffffff;
+            border: 2px dashed #4a3b2c;
+            background-color: rgba(255, 255, 255, 0.7);
             text-align: center;
         }
 
@@ -164,12 +175,15 @@
 <body>
 
     <div class="container">
-        <!-- Évolution 1 : Nouveau Logo principal Vauban -->
+        <!-- Logo principal -->
         <img src="Logo-vauban-black0.png" alt="Logo Vauban" class="logo">
+
+        <!-- Nouveau Titre (il sera modifié via JavaScript ensuite) -->
+        <div id="titre-principal" class="titre-principal">Un peu d’observation pour déverrouiller cette épreuve</div>
 
         <!-- ================= ÉTAPE 1 : OBSERVATION ================= -->
         <div id="zone-observation">
-            <p class="enigme-texte fw-regular">quel nombre est manquant ?</p>
+            <p class="enigme-texte fw-regular">Saurez-vous retrouver le nombre effacé ?</p>
             <img src="Enigme-1-quai-clemenceau.png" alt="Quai Clemenceau" class="visuel-enigme">
             
             <div class="input-group">
@@ -220,10 +234,9 @@
     </div>
 
     <script>
-        let etapeActuelle = 1; // 1 = Observation, 2 = Énigme Audio
+        let etapeActuelle = 1; 
         let tentativesRestantes = 4;
         
-        // CORRECTION DE L'ESPACE EN TROP ICI
         const reponseObservationAttendue = "5027";
         const reponsesEnigmeAcceptees = ["auclair de la lune", "au clair de la lune"]; 
 
@@ -253,6 +266,9 @@
                 document.getElementById("zone-observation").style.display = "none";
                 document.getElementById("zone-enigme-audio").style.display = "block";
                 msgErreur.style.display = "none";
+                
+                // Modification du titre sous le logo
+                document.getElementById("titre-principal").textContent = "Épreuve au Quai Clémenceau";
                 
                 // Réinitialisation des tentatives pour l'énigme suivante
                 etapeActuelle = 2;
