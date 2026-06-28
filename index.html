@@ -164,8 +164,10 @@
 <body>
 
     <div class="container">
+        <!-- Évolution 1 : Nouveau Logo principal Vauban -->
         <img src="Logo-vauban-black0.png" alt="Logo Vauban" class="logo">
 
+        <!-- ================= ÉTAPE 1 : OBSERVATION ================= -->
         <div id="zone-observation">
             <p class="enigme-texte fw-regular">quel nombre est manquant ?</p>
             <img src="Enigme-1-quai-clemenceau.png" alt="Quai Clemenceau" class="visuel-enigme">
@@ -177,6 +179,7 @@
             </div>
         </div>
 
+        <!-- ================= ÉTAPE 2 : ÉNIGME AUDIO (Masquée au départ) ================= -->
         <div id="zone-enigme-audio" style="display: none;">
             <audio id="enigme-audio" src="Kalimba-lecture-notes-Japonais.mp3"></audio>
             
@@ -194,9 +197,11 @@
             </div>
         </div>
 
+        <!-- Éléments de suivi communs -->
         <p class="compteur" id="texte-compteur">Tentatives restantes : <span id="nb-essais">4</span></p>
         <div id="message-erreur" class="erreur">Mauvaise réponse. Essayez encore !</div>
 
+        <!-- ================= ÉTAPE 3 : RÉSULTATS (Masquée au départ) ================= -->
         <div id="message-resultat">
             <h3>Bravo !</h3>
             <p>La croissance tout bonnement exponentielle de notre belle station balnéaire a nécessité quelques ajustements spirituels d'envergure. Il a fallu rapidement ordonner la construction de cette très imposante église Sainte-Madeleine pour accueillir dignement la ferveur de nos riches estivants. Car la villégiature et les bains de mer n'excluent en rien la foi fervente, ni la plus stricte rigueur morale ! N'oubliez jamais que la mer est une création divine dotée de puissantes vertus curatives, et non un vulgaire terrain de jeu pour enfants dissipés.</p>
@@ -218,7 +223,8 @@
         let etapeActuelle = 1; // 1 = Observation, 2 = Énigme Audio
         let tentativesRestantes = 4;
         
-        const reponseObservation Attendue = "5027";
+        // CORRECTION DE L'ESPACE EN TROP ICI
+        const reponseObservationAttendue = "5027";
         const reponsesEnigmeAcceptees = ["auclair de la lune", "au clair de la lune"]; 
 
         const audio = document.getElementById("enigme-audio");
@@ -231,7 +237,7 @@
             audio.pause();
         }
 
-        // Nouvelle fonction pour valider la première étape d'observation
+        // Fonction pour valider la première étape d'observation
         function verifierObservation() {
             const inputElement = document.getElementById("observation-input");
             const btnElement = document.getElementById("btn-valider-observation");
@@ -257,7 +263,7 @@
             }
         }
 
-        // Fonction modifiée pour valider la seconde étape (énigme audio)
+        // Fonction pour valider la seconde étape (énigme audio)
         function verifierReponse() {
             const inputElement = document.getElementById("reponse-input");
             const btnElement = document.getElementById("btn-valider-enigme");
