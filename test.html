@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Quête Vauban - Énigme Saint-Martin-de-Ré</title>
+    <style>
+        body {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            /* Création d'un effet papier ancien en CSS */
+            background-color: #f4ebd8;
+            background-image: radial-gradient(circle at center, #fdf6e3 0%, #e6d5b8 100%);
+            color: #3a2e24; /* Texte légèrement marron foncé pour s'accorder au fond */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .logo {
+            max-width: 150px; /* Taille du logo réduite */
+            margin-bottom: 20px;
+        }
+
+        /* --- Nouveau titre dynamique --- */
+        .titre-principal {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #2c221a;
+        }
+
+        .enigme-texte {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .visuel-enigme {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* Ombre légèrement renforcée */
+        }
+
+        .fw-light { font-weight: 300; }
+        .fw-regular { font-weight: 400; }
+        .fw-bold { font-weight: bold; }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            font-size: 1rem;
+            padding: 10px 15px;
+            border: 2px solid #4a3b2c; /* Bordure assortie au thème */
+            border-radius: 4px;
+            width: 250px;
+            margin-bottom: 10px;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.7); /* Rend le champ légèrement transparent */
+        }
+
+        input[type="text"]::placeholder {
+            color: #888;
+            font-style: italic;
+        }
+
+        button {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: #3a2e24; /* Bouton assorti au thème */
+            color: white;
+            border: 2px solid #3a2e24;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: transparent;
+            color: #3a2e24;
+        }
+
+        button:disabled, input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .compteur {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        #message-resultat {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #4a3b2c;
+            background-color: rgba(255, 255, 255, 0.6); /* Fond semi-transparent pour lire sur le papier */
+            text-align: left;
+        }
+
+        #message-resultat h3 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .erreur {
+            color: #b71c1c;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Logo principal -->
+        <img src="Logo-vauban-black0.png" alt="Logo Vauban" class="logo">
+
+        <!-- Nouveau Titre (il sera modifié via JavaScript ensuite) -->
+        <div id="titre-principal" class="titre-principal">Un peu d’observation pour déverrouiller cette épreuve</div>
+
+        <!-- ================= ÉTAPE 1 : OBSERVATION ================= -->
+        <div id="zone-observation">
+            <p class="enigme-texte fw-regular">Qui suis-je ?</p>
+            <img src="Enigme-test-vauban.png" alt="Indice Vauban" class="visuel-enigme">
+            
+            <div class="input-group">
+                <input type="text" id="observation-input" placeholder="Votre réponse">
+                <br>
+                <button id="btn-valider-observation" onclick="verifierObservation()">Valider</button>
+            </div>
+        </div>
+
+        <!-- ================= ÉTAPE 2 : ÉNIGME TEXTE (Masquée au départ) ================= -->
+        <div id="zone-enigme-texte" style="display: none;">
+            <p class="enigme-texte fw-regular">Quel jour vient après vendredi ?</p>
+
+            <div class="input-group">
+                <input type="text" id="reponse-input" placeholder="Saisissez votre réponse">
+                <br>
+                <button id="btn-valider-enigme" onclick="verifierReponse()">Valider</button>
+            </div>
+        </div>
+
+        <!-- Éléments de suivi communs -->
+        <p class="compteur" id="texte-compteur">Tentatives restantes : <span id="nb-essais">4</span></p>
+        <div id="message-erreur" class="erreur">Mauvaise réponse. Essayez encore !</div>
+
+        <!-- ================= ÉTAPE 3 : RÉSULTATS (Masquée au départ) ================= -->
+        <div id="message-resultat">
+            <h3>Bravo !</h3>
+        </div>
+    </div>
+
+    <script>
+        let etapeActuelle = 1; 
+        let tentativesRestantes = 4;
+        
+        const reponseObservationAttendue = "vauban";
+        const reponsesEnigmeAcceptees = ["samedi"]; 
+
+        // Fonction pour valider la première étape d'observation
+        function verifierObservation() {
+            const inputElement = document.getElementById("observation-input");
+            const btnElement = document.getElementById("btn-valider-observation");
+            const msgErreur = document.getElementById("message-erreur");
+            const nbEssaisElement = document.getElementById("nb-essais");
+
+            // Convertir en minuscules pour comparer (Vauban, VAUBAN ou vauban fonctionneront)
+            const reponseJoueur = inputElement.value.trim().toLowerCase();
+
+            if (reponseJoueur === "") return;
+
+            if (reponseJoueur === reponseObservationAttendue) {
+                // Succès étape 1 -> Passage à l'étape 2
+                document.getElementById("zone-observation").style.display = "none";
+                document.getElementById("zone-enigme-texte").style.display = "block";
+                msgErreur.style.display = "none";
+                
+                // Modification du titre sous le logo
+                document.getElementById("titre-principal").textContent = "L'Énigme";
+                
+                // Réinitialisation des tentatives pour l'énigme suivante
+                etapeActuelle = 2;
+                tentativesRestantes = 4;
+                nbEssaisElement.textContent = tentativesRestantes;
+            } else {
+                gestionErreur(inputElement, btnElement, msgErreur, nbEssaisElement);
+            }
+        }
+
+        // Fonction pour valider la seconde étape (énigme)
+        function verifierReponse() {
+            const inputElement = document.getElementById("reponse-input");
+            const btnElement = document.getElementById("btn-valider-enigme");
+            const msgErreur = document.getElementById("message-erreur");
+            const msgResultat = document.getElementById("message-resultat");
+            const nbEssaisElement = document.getElementById("nb-essais");
+
+            const reponseJoueur = inputElement.value.trim().toLowerCase();
+
+            if (reponseJoueur === "") return; 
+
+            if (reponsesEnigmeAcceptees.includes(reponseJoueur)) {
+                // Succès final !
+                document.getElementById("zone-enigme-texte").style.display = "none";
+                document.getElementById("texte-compteur").style.display = "none";
+                msgErreur.style.display = "none";
+                msgResultat.style.display = "block";
+                
+                // On peut aussi cacher le titre principal à la fin si on veut épurer l'écran
+                document.getElementById("titre-principal").style.display = "none";
+            } else {
+                gestionErreur(inputElement, btnElement, msgErreur, nbEssaisElement);
+            }
+        }
+
+        // Système de décompte partagé et générique
+        function gestionErreur(inputEl, btnEl, msgErr, txtCompteur) {
+            tentativesRestantes--;
+            txtCompteur.textContent = tentativesRestantes;
+            msgErr.style.display = "block";
+            inputEl.value = "";
+
+            if (tentativesRestantes <= 0) {
+                inputEl.disabled = true;
+                btnEl.disabled = true;
+                msgErr.textContent = "Vous n'avez plus de tentatives ! L'énigme est bloquée.";
+            }
+        }
+
+        // Prise en compte de la touche Entrée pour l'étape 1
+        document.getElementById("observation-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                verifierObservation();
+            }
+        });
+
+        // Prise en compte de la touche Entrée pour l'étape 2
+        document.getElementById("reponse-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                verifierReponse();
+            }
+        });
+    </script>
+
+</body>
+</html>
