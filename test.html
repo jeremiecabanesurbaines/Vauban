@@ -127,6 +127,22 @@
             margin-top: 10px;
             display: none;
         }
+        
+        /* --- Style de l'encart Indice --- */
+        .encart-indice {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #4a3b2c;
+            background-color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+        }
+
+        #texte-indice {
+            display: none;
+            font-size: 1.1rem;
+            color: #333;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -168,6 +184,21 @@
         <!-- ================= ÉTAPE 3 : RÉSULTATS (Masquée au départ) ================= -->
         <div id="message-resultat">
             <h3>Bravo !</h3>
+            
+            <p><strong>Sébastien Le Prestre de Vauban, l'esprit derrière les pierres</strong></p>
+            
+            <p>Pour comprendre la naissance de la cité fortifiée, il faut d’abord comprendre l’homme qui l'a dessinée. Sébastien Le Prestre, seigneur de Vauban (1633-1707), n'est pas seulement un ingénieur militaire ; c'est un homme de terrain, un humaniste et un travailleur infatigable au service de Louis XIV.</p>
+            
+            <p>Issu de la petite noblesse bourguignonne, Vauban passe sa vie sur les routes de France à fortifier les frontières (la fameuse "ceinture de fer"). Son secret ? Il n'applique jamais une formule toute faite. Il observe le relief, le climat, les matériaux locaux, et adapte son architecture au terrain. Nommé Commissaire général des fortifications en 1678, il est au sommet de son art lorsqu'il pose les yeux sur l’Île de Ré en 1681. Saint-Martin sera l’un de ses projets les plus purs, car le terrain plat et l'absence de ruines médiévales lui offriront une page blanche pour déployer son génie.</p>
+            
+            <!-- Nouvel encart pour l'indice -->
+            <div class="encart-indice">
+                <button id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
+                <div id="texte-indice">
+                    <p>Voici votre indice :<br><strong>La troisième molette du cadenas est figée sur le chiffre 2.</strong></p>
+                    <p><em>Conservez-le, il vous sera utile pour déverrouiller le coffre.</em></p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -227,7 +258,7 @@
                 msgErreur.style.display = "none";
                 msgResultat.style.display = "block";
                 
-                // On peut aussi cacher le titre principal à la fin si on veut épurer l'écran
+                // On cache le titre principal à la fin pour épurer l'écran
                 document.getElementById("titre-principal").style.display = "none";
             } else {
                 gestionErreur(inputElement, btnElement, msgErreur, nbEssaisElement);
@@ -246,6 +277,12 @@
                 btnEl.disabled = true;
                 msgErr.textContent = "Vous n'avez plus de tentatives ! L'énigme est bloquée.";
             }
+        }
+        
+        // Fonction pour afficher l'indice
+        function afficherIndice() {
+            document.getElementById("btn-indice").style.display = "none";
+            document.getElementById("texte-indice").style.display = "block";
         }
 
         // Prise en compte de la touche Entrée pour l'étape 1
