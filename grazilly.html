@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Quête Vauban - Énigme Saint-Martin-de-Ré</title>
+    <title>La Quête Vauban - Énigme N°6</title>
     <style>
         body {
             font-family: "American Typewriter", "Courier New", Courier, serif;
@@ -18,27 +18,34 @@
             justify-content: center;
             min-height: 100vh;
             text-align: center;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        body.etape2 {
+            background-color: #2B4A3F !important;
+            background-image: none !important;
+            color: #ffffff !important;
         }
 
         .container { max-width: 600px; padding: 20px; }
-
         .logo { max-width: 250px; margin-bottom: 30px; }
 
-        .titre-epreuve {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 25px;
-            letter-spacing: 2px;
-            color: #2c221a;
-        }
+        .titre-epreuve { font-size: 1.8rem; font-weight: bold; margin-bottom: 25px; letter-spacing: 2px; }
+        body.etape2 .titre-epreuve { color: #ffffff !important; }
 
-        .enigme-texte {
-            font-size: 1.2rem;
-            line-height: 1.5;
+        .enigme-texte { font-size: 1.2rem; line-height: 1.5; margin-bottom: 20px; }
+        
+        .visuel-enigme {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
-        /* --- Contrôles Audio --- */
+        /* --- Audio masqué par défaut --- */
+        .audio-section { display: none; }
+
         .audio-controls {
             display: flex;
             justify-content: center;
@@ -47,35 +54,17 @@
             margin-bottom: 15px;
         }
 
-        .audio-btn {
-            cursor: pointer;
-            width: 60px;
-            height: auto;
-            transition: transform 0.2s ease;
-        }
-
+        .audio-btn { cursor: pointer; width: 60px; height: auto; transition: transform 0.2s ease; }
         .audio-btn:hover { transform: scale(1.1); }
         
-        .indice-audio {
-            font-size: 1rem;
-            font-style: italic;
-            color: #555555;
-            margin-bottom: 25px;
-        }
-
-        .visuel-enigme {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
+        .indice-audio { font-size: 1rem; font-style: italic; color: #555555; margin-bottom: 25px; }
+        body.etape2 .indice-audio { color: #dddddd; }
 
         input[type="text"] {
             font-family: "American Typewriter", "Courier New", Courier, serif;
             font-size: 1rem;
             padding: 10px 15px;
-            border: 2px solid #3a2e24;
+            border: 2px solid #333;
             border-radius: 4px;
             width: 250px;
             margin-bottom: 10px;
@@ -86,122 +75,74 @@
             font-size: 1rem;
             font-weight: bold;
             padding: 10px 20px;
-            background-color: #3a2e24;
+            background-color: #333;
             color: white;
-            border: 2px solid #3a2e24;
+            border: 2px solid #333;
             border-radius: 4px;
             cursor: pointer;
         }
 
-        button:hover { background-color: transparent; color: #3a2e24; }
+        button:hover { background-color: white; color: #333; }
 
-        #message-resultat {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #3a2e24;
-            background-color: rgba(255, 255, 255, 0.7);
-            text-align: left;
-        }
-
-        .erreur { color: #b71c1c; font-weight: bold; margin-top: 10px; display: none; }
+        .erreur { color: #d9534f; font-weight: bold; margin-top: 10px; display: none; }
         
-        .encart-indice {
-            margin-top: 30px;
-            padding: 20px;
-            border: 2px dashed #3a2e24;
-            text-align: center;
-        }
-
-        #texte-indice { display: none; font-size: 1.1rem; margin-top: 10px; }
+        #message-resultat { display: none; margin-top: 20px; padding: 20px; border: 1px solid #333; background-color: #f9f9f9; text-align: left; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <img src="Logo-vauban-turquoise0.png" alt="Logo Vauban" class="logo">
-        
+        <img src="Logo-vauban-turquoise0.png" alt="Logo" class="logo">
         <div class="titre-epreuve">ÉPREUVE N°6</div>
 
-        <!-- Section Audio -->
-        <audio id="enigme-audio" src="Kalimba-lecture-notes-Japonais.mp3"></audio>
-        <div class="audio-controls">
-            <img src="Play0.png" alt="Jouer" class="audio-btn" onclick="jouerAudio()">
-            <img src="Stop0.png" alt="Arrêter" class="audio-btn" onclick="stopperAudio()">
+        <!-- Étape 1 : Observation -->
+        <div id="zone-observation">
+            <p class="enigme-texte">A Martin au ???</p>
+            <img src="Enigme-6-grue-quai-launay-grazilly.jpg" alt="Grue" class="visuel-enigme">
+            <div class="input-group">
+                <input type="text" id="obs-input" placeholder="Réponse">
+                <br>
+                <button onclick="verifierObservation()">Valider</button>
+            </div>
         </div>
-        <p class="indice-audio">Vos yeux ne suffiront pas ici. Mettez le son.</p>
 
-        <p class="enigme-texte">A Martin au ???</p>
-        
-        <img src="Enigme-6-grue-quai-launay-grazilly.jpg" alt="Grue du quai" class="visuel-enigme">
-
-        <div class="input-group" id="zone-saisie">
-            <input type="text" id="reponse-input" placeholder="Saisissez votre réponse">
-            <br>
-            <button id="btn-valider" onclick="verifierReponse()">Valider</button>
+        <!-- Étape 2 : Audio et Enigme (Masqués) -->
+        <div id="zone-enigme" class="audio-section">
+            <audio id="enigme-audio" src="Kalimba-lecture-notes-Japonais.mp3"></audio>
+            <div class="audio-controls">
+                <img src="Play0.png" alt="Jouer" class="audio-btn" onclick="jouerAudio()">
+                <img src="Stop0.png" alt="Arrêter" class="audio-btn" onclick="stopperAudio()">
+            </div>
+            <p class="indice-audio">Vos yeux ne suffiront pas ici. Mettez le son.</p>
+            <!-- (Ajoutez ici le champ texte pour l'énigme si nécessaire) -->
         </div>
 
         <p class="compteur" id="texte-compteur">Tentatives restantes : <span id="nb-essais">4</span></p>
-
-        <div id="message-erreur" class="erreur">Mauvaise réponse. Essayez encore !</div>
+        <div id="message-erreur" class="erreur">Mauvaise réponse.</div>
 
         <div id="message-resultat">
             <h3>Bravo !</h3>
-            <p><strong>La « Ville Intra-Muros » et ses vides, le paradoxe de la cité idéale</strong></p>
-            <p>Derrière la géométrie parfaite des remparts de Vauban se cache une anomalie urbaine unique en France. Lorsque l'ingénieur du Roi-Soleil dessine les plans de Saint-Martin-de-Ré, il voit grand, très grand. Il conçoit une enceinte gigantesque, capable non seulement d'abriter les habitants du bourg, mais aussi de servir de refuge à toute la population rurale de l'Île de Ré, ainsi qu'à leur bétail, en cas d'invasion anglaise.</p>
-            <p>Le projet est si ambitieux que l'espace sécurisé à l'intérieur des remparts dépasse largement les besoins réels de la population locale. Vauban avait imaginé une grille de rues géométriques pour combler ce vide, mais la croissance démographique et économique espérée n'a jamais eu lieu. Faute d'habitants pour la bâtir, la « ville idéale » est restée en partie inachevée.</p>
-            <p>C'est ce qui explique le paysage si particulier de Saint-Martin-de-Ré aujourd'hui : un contraste saisissant entre le cœur historique dense (autour du port) et les vastes espaces verts, parcelles agricoles et clos de vignes qui s'étendent toujours intra-muros, juste au pied des remparts. Ce qui devait être un réservoir militaire pour temps de guerre offre désormais à la cité un poumon vert exceptionnel, figé dans le tracé de pierre du XVIIe siècle.</p>
-
-            <div class="encart-indice">
-                <button id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
-                <div id="texte-indice">
-                    <p>Voici votre indice : <strong>La deuxième molette est un nombre impair et est strictement supérieur à 5.</strong></p>
-                </div>
-            </div>
+            <p>La « Ville Intra-Muros » et ses vides, le paradoxe de la cité idéale...</p>
+            <!-- Texte complet à insérer ici -->
         </div>
     </div>
 
     <script>
-        let tentativesRestantes = 4;
-        const reponsesAcceptees = ["mans"]; 
-        const audio = document.getElementById("enigme-audio");
+        let tentatives = 4;
+        function jouerAudio() { document.getElementById("enigme-audio").play(); }
+        function stopperAudio() { let a = document.getElementById("enigme-audio"); a.pause(); a.currentTime = 0; }
 
-        function jouerAudio() { audio.play(); }
-        function stopperAudio() { audio.pause(); audio.currentTime = 0; }
-
-        function verifierReponse() {
-            const inputElement = document.getElementById("reponse-input");
-            const msgErreur = document.getElementById("message-erreur");
-            const msgResultat = document.getElementById("message-resultat");
-
-            const reponseJoueur = inputElement.value.trim().toLowerCase();
-
-            if (reponsesAcceptees.includes(reponseJoueur)) {
-                stopperAudio();
-                document.getElementById("zone-saisie").style.display = "none";
-                document.querySelector(".enigme-texte").style.display = "none";
-                document.querySelector(".visuel-enigme").style.display = "none";
-                document.querySelector(".audio-controls").style.display = "none";
-                document.querySelector(".indice-audio").style.display = "none";
-                document.getElementById("texte-compteur").style.display = "none";
-                msgErreur.style.display = "none";
-                msgResultat.style.display = "block";
+        function verifierObservation() {
+            let val = document.getElementById("obs-input").value.trim().toLowerCase();
+            if(val === "mans") {
+                document.getElementById("zone-observation").style.display = "none";
+                document.getElementById("zone-enigme").style.display = "block";
+                document.body.classList.add("etape2");
             } else {
-                tentativesRestantes--;
-                document.getElementById("nb-essais").textContent = tentativesRestantes;
-                msgErreur.style.display = "block";
-                inputElement.value = "";
-                if (tentativesRestantes <= 0) {
-                    inputElement.disabled = true;
-                    document.getElementById("btn-valider").disabled = true;
-                    msgErreur.textContent = "Vous n'avez plus de tentatives !";
-                }
+                tentatives--;
+                document.getElementById("nb-essais").textContent = tentatives;
+                document.getElementById("message-erreur").style.display = "block";
             }
-        }
-
-        function afficherIndice() {
-            document.getElementById("btn-indice").style.display = "none";
-            document.getElementById("texte-indice").style.display = "block";
         }
     </script>
 </body>
