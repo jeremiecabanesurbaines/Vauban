@@ -7,10 +7,10 @@
     <style>
         body {
             font-family: "American Typewriter", "Courier New", Courier, serif;
-            /* Création d'un effet papier ancien en CSS */
+            /* Fond Étape 1 : Effet papier ancien */
             background-color: #f4ebd8;
             background-image: radial-gradient(circle at center, #fdf6e3 0%, #e6d5b8 100%);
-            color: #3a2e24; /* Texte légèrement marron foncé pour s'accorder au fond */
+            color: #3a2e24; 
             margin: 0;
             padding: 20px;
             display: flex;
@@ -19,6 +19,14 @@
             justify-content: center;
             min-height: 100vh;
             text-align: center;
+            transition: background 0.5s ease, color 0.5s ease; /* Transition douce pour le changement de couleur */
+        }
+
+        /* --- CLASSE DYNAMIQUE POUR L'ÉTAPE 2 (Fond rouge #f41c3b) --- */
+        body.etape2 {
+            background-color: #f41c3b !important;
+            background-image: none !important;
+            color: #ffffff !important;
         }
 
         .container {
@@ -27,16 +35,31 @@
         }
 
         .logo {
-            max-width: 150px; /* Taille du logo réduite */
+            max-width: 150px; 
             margin-bottom: 20px;
         }
 
-        /* --- Nouveau titre dynamique --- */
+        /* --- Nouveau titre fixe demandé --- */
+        .titre-epreuve {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            color: #2c221a;
+        }
+        body.etape2 .titre-epreuve {
+            color: #ffffff !important;
+        }
+
+        /* --- Titre dynamique --- */
         .titre-principal {
             font-size: 1.4rem;
             font-weight: bold;
             margin-bottom: 25px;
             color: #2c221a;
+        }
+        body.etape2 .titre-principal {
+            color: #ffffff !important;
         }
 
         .enigme-texte {
@@ -50,7 +73,7 @@
             height: auto;
             border-radius: 4px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* Ombre légèrement renforcée */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
         }
 
         .fw-light { font-weight: 300; }
@@ -65,12 +88,18 @@
             font-family: "American Typewriter", "Courier New", Courier, serif;
             font-size: 1rem;
             padding: 10px 15px;
-            border: 2px solid #4a3b2c; /* Bordure assortie au thème */
+            border: 2px solid #4a3b2c; 
             border-radius: 4px;
             width: 250px;
             margin-bottom: 10px;
             outline: none;
-            background-color: rgba(255, 255, 255, 0.7); /* Rend le champ légèrement transparent */
+            background-color: rgba(255, 255, 255, 0.7); 
+            transition: all 0.3s ease;
+        }
+        body.etape2 input[type="text"] {
+            border-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333333;
         }
 
         input[type="text"]::placeholder {
@@ -83,7 +112,7 @@
             font-size: 1rem;
             font-weight: bold;
             padding: 10px 20px;
-            background-color: #3a2e24; /* Bouton assorti au thème */
+            background-color: #3a2e24; 
             color: white;
             border: 2px solid #3a2e24;
             border-radius: 4px;
@@ -96,6 +125,17 @@
             color: #3a2e24;
         }
 
+        /* Adaptation du bouton pour l'étape 2 sur fond rouge */
+        body.etape2 button {
+            background-color: #ffffff;
+            color: #f41c3b;
+            border-color: #ffffff;
+        }
+        body.etape2 button:hover {
+            background-color: transparent;
+            color: #ffffff;
+        }
+
         button:disabled, input:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -106,14 +146,22 @@
             color: #666;
             margin-bottom: 20px;
         }
+        body.etape2 .compteur {
+            color: #e0e0e0;
+        }
 
         #message-resultat {
             display: none;
             margin-top: 20px;
             padding: 20px;
             border: 1px solid #4a3b2c;
-            background-color: rgba(255, 255, 255, 0.6); /* Fond semi-transparent pour lire sur le papier */
+            background-color: rgba(255, 255, 255, 0.6); 
             text-align: left;
+            color: #333333; /* Texte du résultat sombre pour rester lisible dans son encart blanc */
+        }
+        body.etape2 #message-resultat {
+            border-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.9);
         }
 
         #message-resultat h3 {
@@ -127,14 +175,19 @@
             margin-top: 10px;
             display: none;
         }
+        body.etape2 .erreur {
+            color: #ffeb3b; /* Jaune vif pour l'erreur sur fond rouge afin de bien ressortir */
+        }
         
-        /* --- Style de l'encart Indice --- */
         .encart-indice {
             margin-top: 30px;
             padding: 20px;
             border: 2px dashed #4a3b2c;
             background-color: rgba(255, 255, 255, 0.7);
             text-align: center;
+        }
+        body.etape2 .encart-indice {
+            border-color: #f41c3b;
         }
 
         #texte-indice {
@@ -148,13 +201,12 @@
 <body>
 
     <div class="container">
-        <!-- Logo principal -->
         <img src="Logo-vauban-black0.png" alt="Logo Vauban" class="logo">
 
-        <!-- Nouveau Titre (il sera modifié via JavaScript ensuite) -->
+        <div class="titre-epreuve">ÉPREUVE TEST</div>
+
         <div id="titre-principal" class="titre-principal">Un peu d’observation pour déverrouiller cette épreuve</div>
 
-        <!-- ================= ÉTAPE 1 : OBSERVATION ================= -->
         <div id="zone-observation">
             <p class="enigme-texte fw-regular">Qui suis-je ?</p>
             <img src="Enigme-test-vauban.png" alt="Indice Vauban" class="visuel-enigme">
@@ -166,7 +218,6 @@
             </div>
         </div>
 
-        <!-- ================= ÉTAPE 2 : ÉNIGME TEXTE (Masquée au départ) ================= -->
         <div id="zone-enigme-texte" style="display: none;">
             <p class="enigme-texte fw-regular">Quel jour vient après vendredi ?</p>
 
@@ -177,11 +228,9 @@
             </div>
         </div>
 
-        <!-- Éléments de suivi communs -->
         <p class="compteur" id="texte-compteur">Tentatives restantes : <span id="nb-essais">4</span></p>
         <div id="message-erreur" class="erreur">Mauvaise réponse. Essayez encore !</div>
 
-        <!-- ================= ÉTAPE 3 : RÉSULTATS (Masquée au départ) ================= -->
         <div id="message-resultat">
             <h3>Bravo !</h3>
             
@@ -191,7 +240,6 @@
             
             <p>Issu de la petite noblesse bourguignonne, Vauban passe sa vie sur les routes de France à fortifier les frontières (la fameuse "ceinture de fer"). Son secret ? Il n'applique jamais une formule toute faite. Il observe le relief, le climat, les matériaux locaux, et adapte son architecture au terrain. Nommé Commissaire général des fortifications en 1678, il est au sommet de son art lorsqu'il pose les yeux sur l’Île de Ré en 1681. Saint-Martin sera l’un de ses projets les plus purs, car le terrain plat et l'absence de ruines médiévales lui offriront une page blanche pour déployer son génie.</p>
             
-            <!-- Nouvel encart pour l'indice -->
             <div class="encart-indice">
                 <button id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
                 <div id="texte-indice">
@@ -216,7 +264,6 @@
             const msgErreur = document.getElementById("message-erreur");
             const nbEssaisElement = document.getElementById("nb-essais");
 
-            // Convertir en minuscules pour comparer (Vauban, VAUBAN ou vauban fonctionneront)
             const reponseJoueur = inputElement.value.trim().toLowerCase();
 
             if (reponseJoueur === "") return;
@@ -226,6 +273,9 @@
                 document.getElementById("zone-observation").style.display = "none";
                 document.getElementById("zone-enigme-texte").style.display = "block";
                 msgErreur.style.display = "none";
+                
+                // AJOUT : Activation de la classe CSS pour passer le fond au rouge #f41c3b
+                document.body.classList.add("etape2");
                 
                 // Modification du titre sous le logo
                 document.getElementById("titre-principal").textContent = "L'Énigme";
@@ -258,8 +308,9 @@
                 msgErreur.style.display = "none";
                 msgResultat.style.display = "block";
                 
-                // On cache le titre principal à la fin pour épurer l'écran
+                // On cache les titres à la fin pour épurer l'affichage de l'encart final
                 document.getElementById("titre-principal").style.display = "none";
+                document.querySelector(".titre-epreuve").style.display = "none";
             } else {
                 gestionErreur(inputElement, btnElement, msgErreur, nbEssaisElement);
             }
