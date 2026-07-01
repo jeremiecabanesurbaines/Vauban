@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sur les pas de Vauban - Menu</title>
+    <style>
+        body {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            background-color: #2B4A3F;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 { font-size: 2rem; margin-bottom: 5px; }
+        h2 { font-size: 1.2rem; font-weight: 300; margin-bottom: 30px; }
+
+        .btn-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-epreuve {
+            display: block;
+            width: 250px;
+            padding: 15px;
+            background-color: #ffffff;
+            color: #2B4A3F;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: 2px solid #ffffff;
+        }
+
+        .btn-epreuve:hover {
+            background-color: transparent;
+            color: #ffffff;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 1rem;
+        }
+
+        /* Animation Tilt */
+        .tilt-anim {
+            display: inline-block;
+            animation: tilt 3s infinite ease-in-out;
+        }
+
+        @keyframes tilt {
+            0%, 100% { transform: rotate(0deg); }
+            5% { transform: rotate(-10deg); }
+            10% { transform: rotate(10deg); }
+            15% { transform: rotate(-5deg); }
+            20% { transform: rotate(5deg); }
+            25%, 100% { transform: rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="Logo-vauban-black0.png" alt="Logo Vauban" class="logo">
+        
+        <h1>SUR LES PAS DE VAUBAN</h1>
+        <h2>Liste des épreuves</h2>
+
+        <div class="btn-list">
+            <a href="https://jeremiecabanesurbaines.github.io/Vauban/test.html" class="btn-epreuve">ÉPREUVE TEST</a>
+            <a href="https://jeremiecabanesurbaines.github.io/Vauban/Clemenceau.html" class="btn-epreuve">ÉPREUVE 1</a>
+            <a href="https://jeremiecabanesurbaines.github.io/Vauban/musée-ernest-cognacq.html" class="btn-epreuve">ÉPREUVE 2</a>
+            <a href="https://jeremiecabanesurbaines.github.io/Vauban/eglise.html" class="btn-epreuve">ÉPREUVE 3</a>
+            <a href="https://jeremiecabanesurbaines.github.io/Vauban/clocher.html" class="btn-epreuve">ÉPREUVE 4</a>
+            <a href="https://jeremiecabanesurbaines.github.io/Vauban/campari.html" class="btn-epreuve">ÉPREUVE 5</a>
+            <a href="https://jeremiecabanesurbaines.github.io/Vauban/grazilly.html" class="btn-epreuve">ÉPREUVE 6</a>
+        </div>
+
+        <p class="footer">
+            Saurez-vous retrouver le mystère de Vauban ? <span class="tilt-anim">Bonne chance</span>
+        </p>
+    </div>
+
+</body>
+</html>
