@@ -214,7 +214,11 @@
 
         function verifierReponse() {
             const input = document.getElementById("reponse-input").value.trim().toLowerCase();
-            if (input === "étoile") {
+            
+            // Liste contenant les deux variantes orthographiques (avec et sans accent)
+            const reponsesAcceptables = ["étoile", "etoile"];
+            
+            if (reponsesAcceptables.includes(input)) {
                 document.getElementById("zone-enigme-texte").style.display = "none";
                 document.getElementById("texte-compteur").style.display = "none";
                 document.getElementById("message-resultat").style.display = "block";
