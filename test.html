@@ -22,9 +22,9 @@
             transition: background 0.5s ease, color 0.5s ease; /* Transition douce pour le changement de couleur */
         }
 
-        /* --- CLASSE DYNAMIQUE POUR L'ÉTAPE 2 (Fond rouge #f41c3b) --- */
+        /* --- CLASSE DYNAMIQUE POUR L'ÉTAPE 2 (Fond vert militaire #2B4A3F) --- */
         body.etape2 {
-            background-color: #f41c3b !important;
+            background-color: #2B4A3F !important;
             background-image: none !important;
             color: #ffffff !important;
         }
@@ -125,10 +125,10 @@
             color: #3a2e24;
         }
 
-        /* Adaptation du bouton pour l'étape 2 sur fond rouge */
+        /* Adaptation du bouton pour l'étape 2 sur fond vert militaire */
         body.etape2 button {
             background-color: #ffffff;
-            color: #f41c3b;
+            color: #2B4A3F;
             border-color: #ffffff;
         }
         body.etape2 button:hover {
@@ -176,7 +176,7 @@
             display: none;
         }
         body.etape2 .erreur {
-            color: #ffeb3b; /* Jaune vif pour l'erreur sur fond rouge afin de bien ressortir */
+            color: #ffeb3b; /* Jaune vif pour l'erreur sur fond vert foncé afin de bien ressortir */
         }
         
         .encart-indice {
@@ -187,7 +187,7 @@
             text-align: center;
         }
         body.etape2 .encart-indice {
-            border-color: #f41c3b;
+            border-color: #2B4A3F;
         }
 
         #texte-indice {
@@ -201,12 +201,16 @@
 <body>
 
     <div class="container">
+        <!-- Logo principal -->
         <img src="Logo-vauban-black0.png" alt="Logo Vauban" class="logo">
 
+        <!-- Titre fixe ÉPREUVE TEST -->
         <div class="titre-epreuve">ÉPREUVE TEST</div>
 
+        <!-- Titre dynamique -->
         <div id="titre-principal" class="titre-principal">Un peu d’observation pour déverrouiller cette épreuve</div>
 
+        <!-- ================= ÉTAPE 1 : OBSERVATION ================= -->
         <div id="zone-observation">
             <p class="enigme-texte fw-regular">Qui suis-je ?</p>
             <img src="Enigme-test-vauban.png" alt="Indice Vauban" class="visuel-enigme">
@@ -218,6 +222,7 @@
             </div>
         </div>
 
+        <!-- ================= ÉTAPE 2 : ÉNIGME TEXTE (Masquée au départ) ================= -->
         <div id="zone-enigme-texte" style="display: none;">
             <p class="enigme-texte fw-regular">Quel jour vient après vendredi ?</p>
 
@@ -228,9 +233,11 @@
             </div>
         </div>
 
+        <!-- Éléments de suivi communs -->
         <p class="compteur" id="texte-compteur">Tentatives restantes : <span id="nb-essais">4</span></p>
         <div id="message-erreur" class="erreur">Mauvaise réponse. Essayez encore !</div>
 
+        <!-- ================= ÉTAPE 3 : RÉSULTATS (Masquée au départ) ================= -->
         <div id="message-resultat">
             <h3>Bravo !</h3>
             
@@ -240,6 +247,7 @@
             
             <p>Issu de la petite noblesse bourguignonne, Vauban passe sa vie sur les routes de France à fortifier les frontières (la fameuse "ceinture de fer"). Son secret ? Il n'applique jamais une formule toute faite. Il observe le relief, le climat, les matériaux locaux, et adapte son architecture au terrain. Nommé Commissaire général des fortifications en 1678, il est au sommet de son art lorsqu'il pose les yeux sur l’Île de Ré en 1681. Saint-Martin sera l’un de ses projets les plus purs, car le terrain plat et l'absence de ruines médiévales lui offriront une page blanche pour déployer son génie.</p>
             
+            <!-- Encart pour l'indice -->
             <div class="encart-indice">
                 <button id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
                 <div id="texte-indice">
@@ -274,7 +282,7 @@
                 document.getElementById("zone-enigme-texte").style.display = "block";
                 msgErreur.style.display = "none";
                 
-                // AJOUT : Activation de la classe CSS pour passer le fond au rouge #f41c3b
+                // AJOUT : Activation de la classe CSS pour passer le fond au vert militaire #2B4A3F
                 document.body.classList.add("etape2");
                 
                 // Modification du titre sous le logo
