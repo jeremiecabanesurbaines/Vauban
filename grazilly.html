@@ -199,6 +199,7 @@
             background-color: rgba(255, 255, 255, 0.7);
             text-align: center;
         }
+        /* Ajustement de la couleur des bordures et du texte dans le résultat pour la lisibilité */
         body.etape2 .encart-indice { border-color: #2B4A3F; }
 
         #texte-indice { display: none; font-size: 1.1rem; color: #333; margin-top: 10px; }
@@ -261,7 +262,7 @@
             <p>C'est ce qui explique le paysage si particulier de Saint-Martin-de-Ré aujourd'hui : un contraste saisissant entre le cœur historique dense (autour du port) et les vastes espaces verts, parcelles agricoles et clos de vignes qui s'étendent toujours intra-muros, juste au pied des remparts. Ce qui devait être un réservoir militaire pour temps de guerre offre désormais à la cité un poumon vert exceptionnel, figé dans le tracé de pierre du XVIIe siècle.</p>
             
             <div class="encart-indice">
-                <button id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
+                <button id="btn-indice" onclick="afficherIndice()" style="color: #ffffff; background-color: #2B4A3F; border-color: #2B4A3F;">Obtenir mon indice</button>
                 <div id="texte-indice">
                     <p>Voici votre indice :<br><strong>La deuxième molette est un nombre impair et est strictement supérieur à 5.</strong></p>
                     <p><em>Conservez-le précieusement pour espérer ouvrir le cadenas du coffre.</em></p>
@@ -285,7 +286,7 @@
 
         function stopperAudio() {
             audio.pause();
-            audio.currentTime = 0; // Remet l'audio au début quand on clique sur Stop
+            audio.currentTime = 0; 
         }
 
         // 1. Validation de l'étape d'observation
@@ -300,16 +301,13 @@
             if (reponseJoueur === "") return;
 
             if (reponseJoueur === reponseObservationAttendue) {
-                // Succès étape 1 -> On cache l'observation et on affiche l'énigme audio
                 document.getElementById("zone-observation").style.display = "none";
                 document.getElementById("zone-enigme-audio").style.display = "block";
                 msgErreur.style.display = "none";
                 
-                // Passage au thème visuel "Étape 2"
                 document.body.classList.add("etape2");
                 document.getElementById("titre-principal").textContent = "L'Énigme Audio";
                 
-                // On remet le compteur à 4 pour cette nouvelle étape
                 tentativesRestantes = 4;
                 nbEssaisElement.textContent = tentativesRestantes;
             } else {
@@ -332,7 +330,6 @@
             if (reponsesEnigmeAcceptees.includes(reponseJoueur)) {
                 stopperAudio(); 
                 
-                // Succès final -> On cache tout et on affiche le résultat
                 document.getElementById("zone-enigme-audio").style.display = "none";
                 document.getElementById("texte-compteur").style.display = "none";
                 msgErreur.style.display = "none";
@@ -345,7 +342,7 @@
             }
         }
 
-        // 3. Fonction générique pour gérer les erreurs et le compteur
+        // 3. Gestion globale des essais
         function gestionErreur(inputEl, btnEl, msgErr, txtCompteur) {
             tentativesRestantes--;
             txtCompteur.textContent = tentativesRestantes;
@@ -359,13 +356,13 @@
             }
         }
         
-        // 4. Fonction pour afficher l'indice final
+        // 4. Dévoilement de l'indice final
         function afficherIndice() {
             document.getElementById("btn-indice").style.display = "none";
             document.getElementById("texte-indice").style.display = "block";
         }
 
-        // Permet de valider avec la touche "Entrée"
+        // Écouteurs de clavier (Entrée)
         document.getElementById("observation-input").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault();
