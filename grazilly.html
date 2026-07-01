@@ -106,7 +106,7 @@
             </div>
         </div>
 
-        <!-- Étape 2 : Audio et Enigme (Masqués) -->
+        <!-- Étape 2 : Audio et Enigme -->
         <div id="zone-enigme" class="audio-section">
             <audio id="enigme-audio" src="Kalimba-lecture-notes-Japonais.mp3"></audio>
             <div class="audio-controls">
@@ -114,7 +114,13 @@
                 <img src="Stop0.png" alt="Arrêter" class="audio-btn" onclick="stopperAudio()">
             </div>
             <p class="indice-audio">Vos yeux ne suffiront pas ici. Mettez le son.</p>
-            <!-- (Ajoutez ici le champ texte pour l'énigme si nécessaire) -->
+            
+            <!-- CHAMPS AJOUTÉS ICI -->
+            <div class="input-group">
+                <input type="text" id="reponse-input" placeholder="Saisissez la réponse audio">
+                <br>
+                <button onclick="verifierReponseFinale()">Valider réponse</button>
+            </div>
         </div>
 
         <p class="compteur" id="texte-compteur">Tentatives restantes : <span id="nb-essais">4</span></p>
@@ -122,8 +128,7 @@
 
         <div id="message-resultat">
             <h3>Bravo !</h3>
-            <p>La « Ville Intra-Muros » et ses vides, le paradoxe de la cité idéale...</p>
-            <!-- Texte complet à insérer ici -->
+            <p>La « Ville Intra-Muros » et ses vides...</p>
         </div>
     </div>
 
@@ -139,10 +144,26 @@
                 document.getElementById("zone-enigme").style.display = "block";
                 document.body.classList.add("etape2");
             } else {
-                tentatives--;
-                document.getElementById("nb-essais").textContent = tentatives;
-                document.getElementById("message-erreur").style.display = "block";
+                handleError();
             }
+        }
+
+        function verifierReponseFinale() {
+            let val = document.getElementById("reponse-input").value.trim().toLowerCase();
+            if(val === "au clair de la lune") {
+                stopperAudio();
+                document.getElementById("zone-enigme").style.display = "none";
+                document.getElementById("message-resultat").style.display = "block";
+            } else {
+                handleError();
+            }
+        }
+
+        function handleError() {
+            tentatives--;
+            document.getElementById("nb-essais").textContent = tentatives;
+            document.getElementById("message-erreur").style.display = "block";
+            if(tentatives <= 0) alert("Plus de tentatives !");
         }
     </script>
 </body>
