@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Quête Vauban - Énigme Saint-Martin-de-Ré</title>
+    <style>
+        body {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            /* Fond Étape 1 : Effet papier ancien */
+            background-color: #f4ebd8;
+            background-image: radial-gradient(circle at center, #fdf6e3 0%, #e6d5b8 100%);
+            color: #3a2e24; 
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            transition: background 0.5s ease, color 0.5s ease; /* Transition douce */
+        }
+
+        /* --- CLASSE DYNAMIQUE POUR L'ÉTAPE 2 (Fond vert militaire #2B4A3F) --- */
+        body.etape2 {
+            background-color: #2B4A3F !important;
+            background-image: none !important;
+            color: #ffffff !important;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .logo {
+            max-width: 150px; 
+            margin-bottom: 20px;
+        }
+
+        /* --- Titre fixe --- */
+        .titre-epreuve {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            color: #2c221a;
+        }
+        body.etape2 .titre-epreuve {
+            color: #ffffff !important;
+        }
+
+        /* --- Titre dynamique --- */
+        .titre-principal {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #2c221a;
+        }
+        body.etape2 .titre-principal {
+            color: #ffffff !important;
+        }
+
+        .enigme-texte {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        /* --- Animation Tilt pour la phrase de l'étape 2 --- */
+        .tilt-anim {
+            display: inline-block;
+            animation: tilt 3s infinite ease-in-out;
+        }
+
+        @keyframes tilt {
+            0%, 100% { transform: rotate(0deg); }
+            5% { transform: rotate(-15deg); }
+            10% { transform: rotate(15deg); }
+            15% { transform: rotate(-10deg); }
+            20% { transform: rotate(10deg); }
+            25%, 100% { transform: rotate(0deg); }
+        }
+
+        .visuel-enigme {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
+        }
+
+        .fw-light { font-weight: 300; }
+        .fw-regular { font-weight: 400; }
+        .fw-bold { font-weight: bold; }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            font-size: 1rem;
+            padding: 10px 15px;
+            border: 2px solid #4a3b2c; 
+            border-radius: 4px;
+            width: 250px;
+            margin-bottom: 10px;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.7); 
+            transition: all 0.3s ease;
+        }
+        body.etape2 input[type="text"] {
+            border-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333333;
+        }
+
+        input[type="text"]::placeholder {
+            color: #888;
+            font-style: italic;
+        }
+
+        button {
+            font-family: "American Typewriter", "Courier New", Courier, serif;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: #3a2e24; 
+            color: white;
+            border: 2px solid #3a2e24;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: transparent;
+            color: #3a2e24;
+        }
+
+        /* Adaptation du bouton pour l'étape 2 sur fond vert militaire */
+        body.etape2 button {
+            background-color: #ffffff;
+            color: #2B4A3F;
+            border-color: #ffffff;
+        }
+        body.etape2 button:hover {
+            background-color: transparent;
+            color: #ffffff;
+        }
+
+        button:disabled, input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .compteur {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        body.etape2 .compteur {
+            color: #e0e0e0;
+        }
+
+        #message-resultat {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #4a3b2c;
+            background-color: rgba(255, 255, 255, 0.6); 
+            text-align: left;
+            color: #333333;
+        }
+        body.etape2 #message-resultat {
+            border-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        #message-resultat h3 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .erreur {
+            color: #b71c1c;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+        body.etape2 .erreur {
+            color: #ffeb3b;
+        }
+        
+        .encart-indice {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #4a3b2c;
+            background-color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+        }
+        body.etape2 .encart-indice {
+            border-color: #2B4A3F;
+        }
+
+        #texte-indice {
+            display: none;
+            font-size: 1.1rem;
+            color: #333;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="Logo-vauban-vert0.png" alt="Logo Vauban" class="logo">
+
+        <div class="titre-epreuve">ÉPREUVE N°3</div>
+
+        <div id="titre-principal" class="titre-principal">Un peu d’observation pour déverrouiller cette épreuve</div>
+
+        <div id="zone-observation">
+            <p class="enigme-texte fw-regular">Quel numéro porte le banc situé à gauche du n° 30 ?</p>
+            <img src="Enigme-3-eglise-banc.jpg" alt="Banc Église" class="visuel-enigme">
+            
+            <div class="input-group">
+                <input type="text" id="observation-input" placeholder="Votre réponse">
+                <br>
+                <button id="btn-valider-observation" onclick="verifierObservation()">Valider</button>
+            </div>
+        </div>
+
+        <div id="zone-enigme-texte" style="display: none;">
+            <p class="enigme-texte fw-regular">
+                Ils se sont <span class="tilt-anim fw-bold">pliés en 4</span>, pour construire cette cité fortifiée.
+            </p>
+            <img src="Ordre-cercles_10.png" alt="Indice visuel" class="visuel-enigme">
+
+            <div class="input-group">
+                <input type="text" id="reponse-input" placeholder="Saisissez votre réponse">
+                <br>
+                <button id="btn-valider-enigme" onclick="verifierReponse()">Valider</button>
+            </div>
+        </div>
+
+        <p class="compteur" id="texte-compteur">Tentatives restantes : <span id="nb-essais">4</span></p>
+        <div id="message-erreur" class="erreur">Mauvaise réponse. Essayez encore !</div>
+
+        <div id="message-resultat">
+            <h3>Bravo !</h3>
+            
+            <p><strong>Le chantier du siècle, l'édification de l'enceinte de Saint-Martin</strong></p>
+            
+            <p>En 1685, le signal du départ est donné. Le chantier qui s’ouvre à Saint-Martin-de-Ré est un défi logistique et humain titanesque pour l'époque. Sous la direction de l'ingénieur François Ferry, bras droit de Vauban, des milliers d’ouvriers, de terrassiers et de soldats-maçons convergent vers l’île.</p>
+            
+            <p>Le chantier transforme radicalement le paysage : il faut creuser des fossés gigantesques, acheminer par bateau des tonnes de pierres de taille depuis les carrières de Charente (notamment de Crazannes), et cuire des millions de briques sur place. Les conditions de travail sont éprouvantes, les maladies et les accidents fréquents. En l'espace de quelques années, la terre est entaillée pour laisser place à un demi-cercle parfait de 14 kilomètres de courtines et de bastions, modifiant à jamais le quotidien des insulaires qui découvrent leur bourgade transformée en une immense fournaise industrielle.</p>
+            
+            <div class="encart-indice">
+                <button id="btn-indice" onclick="afficherIndice()">Obtenir mon indice</button>
+                <div id="texte-indice">
+                    <p>Voici votre indice :<br><strong>Le chiffre de la première molette est un nombre impair.</strong></p>
+                    <p><em>Conservez-le précieusement pour espérer ouvrir le cadenas du coffre.</em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let etapeActuelle = 1; 
+        let tentativesRestantes = 4;
+        
+        const reponsesObservationAcceptees = ["10"];
+        const reponsesEnigmeAcceptees = ["361", "trois cent soixante et un"]; 
+
+        // Fonction pour valider la première étape d'observation
+        function verifierObservation() {
+            const inputElement = document.getElementById("observation-input");
+            const btnElement = document.getElementById("btn-valider-observation");
+            const msgErreur = document.getElementById("message-erreur");
+            const nbEssaisElement = document.getElementById("nb-essais");
+
+            const reponseJoueur = inputElement.value.trim().toLowerCase();
+
+            if (reponseJoueur === "") return;
+
+            if (reponsesObservationAcceptees.includes(reponseJoueur)) {
+                // Succès étape 1 -> Passage à l'étape 2
+                document.getElementById("zone-observation").style.display = "none";
+                document.getElementById("zone-enigme-texte").style.display = "block";
+                msgErreur.style.display = "none";
+                
+                // Activation de la classe CSS pour passer le fond au vert militaire #2B4A3F
+                document.body.classList.add("etape2");
+                
+                // Modification du titre sous le logo
+                document.getElementById("titre-principal").textContent = "L'Énigme";
+                
+                // Réinitialisation des tentatives pour l'énigme suivante
+                etapeActuelle = 2;
+                tentativesRestantes = 4;
+                nbEssaisElement.textContent = tentativesRestantes;
+            } else {
+                gestionErreur(inputElement, btnElement, msgErreur, nbEssaisElement);
+            }
+        }
+
+        // Fonction pour valider la seconde étape (énigme)
+        function verifierReponse() {
+            const inputElement = document.getElementById("reponse-input");
+            const btnElement = document.getElementById("btn-valider-enigme");
+            const msgErreur = document.getElementById("message-erreur");
+            const msgResultat = document.getElementById("message-resultat");
+            const nbEssaisElement = document.getElementById("nb-essais");
+
+            const reponseJoueur = inputElement.value.trim().toLowerCase();
+
+            if (reponseJoueur === "") return; 
+
+            if (reponsesEnigmeAcceptees.includes(reponseJoueur)) {
+                // Succès final !
+                document.getElementById("zone-enigme-texte").style.display = "none";
+                document.getElementById("texte-compteur").style.display = "none";
+                msgErreur.style.display = "none";
+                msgResultat.style.display = "block";
+                
+                // On cache les titres à la fin pour épurer l'affichage de l'encart final
+                document.getElementById("titre-principal").style.display = "none";
+                document.querySelector(".titre-epreuve").style.display = "none";
+            } else {
+                gestionErreur(inputElement, btnElement, msgErreur, nbEssaisElement);
+            }
+        }
+
+        // Système de décompte partagé et générique
+        function gestionErreur(inputEl, btnEl, msgErr, txtCompteur) {
+            tentativesRestantes--;
+            txtCompteur.textContent = tentativesRestantes;
+            msgErr.style.display = "block";
+            inputEl.value = "";
+
+            if (tentativesRestantes <= 0) {
+                inputEl.disabled = true;
+                btnEl.disabled = true;
+                msgErr.textContent = "Vous n'avez plus de tentatives ! L'énigme est bloquée.";
+            }
+        }
+        
+        // Fonction pour afficher l'indice
+        function afficherIndice() {
+            document.getElementById("btn-indice").style.display = "none";
+            document.getElementById("texte-indice").style.display = "block";
+        }
+
+        // Prise en compte de la touche Entrée pour l'étape 1
+        document.getElementById("observation-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                verifierObservation();
+            }
+        });
+
+        // Prise en compte de la touche Entrée pour l'étape 2
+        document.getElementById("reponse-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                verifierReponse();
+            }
+        });
+    </script>
+
+</body>
+</html>
